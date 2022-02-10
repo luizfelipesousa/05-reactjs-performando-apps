@@ -1,0 +1,148 @@
+- Performando apps com ReactJS
+São conceitos do ReactJS e não do NextJS
+Entender os princiapis momentos quando o react renderiza um novo componente na tela
+renderizar é comparar as versões de um componente e verificar se algo mudou
+- renderização de pai para filho
+se o pai muda o filho também muda
+- renderização propriedade
+quando a prop muda será renderizado
+- atualização de hooks
+quando um hook altera os valores de algum componente
+
+fluxo:
+gerar uma nova versão do componente a ser renderizado, faz toda vez guardada em memoria
+compara a nova versão com a versão anterior ja renderizada na pagina
+se houver mudança renderiza a nova versão
+-> Reconciliation algoritmo que compara as duas estruturas pq asism cnsegue criar regras especificas para não precisar recriar
+completamente o componente, sendo mais preciso, mudando atributo ou propriedade
+Atualiza só o necessário
+
+** Existem regras que evitam que tudo seja renderizado.
+
+Identificar gargalos de performance e aplicar tecnicas para otimizar
+evitar a necessidade de otimização prematura, pode acabar gerando lentidão
+o React já é performatico por si só.
+
+
+HANDS ON
+________________________
+Projeto Hello World
+Em react
+
+criou um arquivo server.js na root
+exporto um modulo
+objto data com atributo product 
+criou um for de 1000 linhas aadicionarndo atributos ao produto (id, nome, price)
+criou um comando server no package.json
+instalar a dependencia json-server
+json-server -d 750 (tempo entre cada requisição) -w(ficar observando) -p 3333 ./server.js
+rodou yarn server
+
+criou um index
+com h1
+form onsubmit
+input de texto mudando o valor de um estado
+botao para submitar
+funcao handleSearch que recebe um event com prevent default
+verificar o search vazio /trim
+faz um fetch para api obter json passando um qeruy param
+criou um state de results
+setResults
+crou um componente de resultado com a listagem
+recebe props de results (array de produtos )
+fez um map iterando peloa array
+criou um componente produto com os mesmos props
+criou uma estrutura com title e price
+
+React DevTools
+extensão ultra importante
+devolve a aba componentes no f12 e profiler
+possivel ver states e quem renderizou os componentes
+não ve como html, mas sim como componentes
+highlight updates when components render
+Obs, todos os componentes são alterados
+novo ciclo de renderização =/= não significa que esta renderizando tudo
+Está comparando o que está na tela com o que é antigo
+
+profiler
+possui um sistema de commits que salva as mudanças que foram feitas
+
+Evitar que todos os filhos sejam renderizados
+
+usando o memo é uma função que evita caso nenhuma propriedade do componente tenha sido alterada
+criou e exportou uma constante passando o memo(Componente)
+Ele vai verificar se houve mudança de props
+//**
+shallow compare -> comparação rasa - verifica a igualdade das informações passadas na propriedade
+{} === {} // false comparando objetos pois a referencia de objetos é diferente
+*// 
+recebe um segundo parametro recebe as prevProps e as nextProps e precisa criar uma função que faça a validação
+usando um objeto.is fazendo a comparação profunda de product.product
+vai usar nas seguintes situações:
+para componentes puros - apenas para componentes que são uma divisão da interface
+Componentes que renderizam de mais
+Re-render com as mesmas com  props
+Componetnes medios e grandes
+
+useMemo
+armazenar valor
+duas funcionalidade
+serve para memorizar o calculo/processamento pesados
+serve para evitar que uma variavel seja alocada em outro lugar na memoria
+useMemo passando a soma, e um parametro de resuls
+fez um reduce dentro da listagem de products para achar o total de preços
+fez um calculo
+renderizou um h2
+não elimina um determinado custo de processamento
+pior momento para se fazer calculo é durante a renderiza~ção
+fazer durante as chaamdas de informações
+fazer durante as chamadas as formatações
+colocou o reduce dentro do metodo de results
+e modificou o objeto results e inicializou vazio no state
+
+useCallBack
+muito parecdo com o useMemo
+Mas serve para memorizar uma função e não um valor
+essa funcao sera passada para um componente filho pelo pai
+prop drilling
+
+criou uma async func recebe id console id
+passou a funcao atraves dos componentes filhos e modificou as tipagens das props
+adicionou um button onclick function
+transformou em const chamando o use passando a funcao e passa a const nas props
+array de dependencia caso precise de algo que mude
+
+Dynamic Import
+Code splitting
+durante a build do app sera gerado um bundle com todos os componentes react.js
+existem funcionalidades que só serão usadas em uma condição especificas
+criou um componetn addproductwishlist
+recebe props funcao onadd oncloserequest
+e retorna um span de confirmação
+com dois buttons sim e nao com cada func
+importou no lugar do button de add anterior
+criou um state boolean isaddinsg?
+passa como false no onrequestclose
+colcoou condicional de exibicao
+botao com setTrue
+
+nessa situação da pra usar lazyload
+importando do next dynamic / lazy (react)
+chamar o dynamic passando funcao importando o componente que deseja
+.then caso nao use export default
+importar as props do coponet e passar como generic no dynamic
+assim, ele só vai carregar quando a condição for atendida
+dynamica recebe um segundo parametro de loading que recebe uma funcao passando um html
+funciona para funções tambem
+
+Virtualização
+permite mostrar somente os itens que estão visiveis na tela do navegador do usuario
+import lib react-vistualized tipagens
+importou list
+passa as props
+overScam precarregamento de items para cima e para baixo
+rowcount results.length
+passar rowrender -> componente com div importando styles, index, key passar para o componetne que sera renderizado
+
+Bundle Analyzer
+Mostra o quanto de espaço cada pacote está ocupando no bundle da aplicação
